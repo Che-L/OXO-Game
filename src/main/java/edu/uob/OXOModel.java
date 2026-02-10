@@ -2,10 +2,11 @@ package edu.uob;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 public class OXOModel implements Serializable {
     @Serial private static final long serialVersionUID = 1;
-    private OXOPlayer[][] cells;
+    private List<List<OXOPlayer>> cells;
     private OXOPlayer[] players;
     private int currentPlayerNumber;
     private OXOPlayer winner;
@@ -52,7 +53,7 @@ public class OXOModel implements Serializable {
     }
 
     public int getNumberOfRows() {
-        return cells.length;
+        return cells.size();
     }
 
     public void addRow() {
@@ -74,7 +75,7 @@ public class OXOModel implements Serializable {
     }
 
     public int getNumberOfColumns() {
-        return cells[0].length;
+        return cells.get(0).size();
     }
 
     public void addColumn() {
@@ -95,8 +96,6 @@ public class OXOModel implements Serializable {
         }
     }
 
-
-
     public OXOPlayer getCellOwner(int rowNumber, int colNumber) {
         return cells[rowNumber][colNumber];
     }
@@ -115,6 +114,18 @@ public class OXOModel implements Serializable {
 
     public void setGameDrawn(boolean isDrawn) {
         gameDrawn = isDrawn;
+    }
+
+    public void increaseWinThreshold() {
+        int curWinThresh = this.winThreshold;
+        curWinThresh += 1;
+        this.winThreshold = curWinThresh;
+    }
+
+    public void decreaseWinThreshold() {
+        int curWinThresh = this.winThreshold;
+        curWinThresh -= 1;
+        this.winThreshold = curWinThresh;
     }
 
     public boolean isGameDrawn() {

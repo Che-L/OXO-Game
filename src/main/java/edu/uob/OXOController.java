@@ -29,20 +29,10 @@ public class OXOController implements Serializable {
     }
 
     public void increaseWinThreshold() {
-        int rows = gameModel.getNumberOfRows();
-        int curCols = gameModel.getNumberOfColumns();
-        int curWinThresh = gameModel.getWinThreshold();
-
-        curWinThresh += 1;
-        this.gameModel = new OXOModel(rows, curCols, curWinThresh);
+        gameModel.increaseWinThreshold();
     }
     public void decreaseWinThreshold() {
-        int rows = gameModel.getNumberOfRows();
-        int curCols = gameModel.getNumberOfColumns();
-        int curWinThresh = gameModel.getWinThreshold();
-
-        curWinThresh -= 1;
-        this.gameModel = new OXOModel(rows, curCols, curWinThresh);
+        gameModel.decreaseWinThreshold();
     }
 
     public void reset() {
