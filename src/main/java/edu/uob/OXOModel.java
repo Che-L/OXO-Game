@@ -2,6 +2,7 @@ package edu.uob;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OXOModel implements Serializable {
@@ -15,8 +16,16 @@ public class OXOModel implements Serializable {
 
     public OXOModel(int numberOfRows, int numberOfColumns, int winThresh) {
         winThreshold = winThresh;
-        cells = new OXOPlayer[numberOfRows][numberOfColumns];
+        cells = new ArrayList<>();
         players = new OXOPlayer[2];
+
+        for (int i = 0; i < numberOfRows; i++) {
+            List<OXOPlayer> row = new ArrayList<>();
+            for (int j = 0; j < numberOfColumns; j++) {
+                row.add(null); // 空格子
+            }
+            cells.add(row);
+        }
     }
 
     public int getNumberOfPlayers() {
@@ -57,20 +66,23 @@ public class OXOModel implements Serializable {
     }
 
     public void addRow() {
-        if (cells.length <= 9) {
-            int curRows = cells.length;
-            int cols = cells[0].length;
-            curRows += 1;
-            this.cells = new OXOPlayer[curRows][cols];
+        if (cells.size() < 9) {
+            int cols = getNumberOfColumns();
+            List<OXOPlayer> newRow = new ArrayList<>();
+            for (int i = 0; i < cols; i++) {
+                newRow.add(null);
+            }
+            cells.add(newRow);
         }
     }
 
     public void removeRow() {
-        if (cells.length > 3) {
-            int curRows = cells.length;
-            int cols = cells[0].length;
-            curRows -= 1;
-            this.cells = new OXOPlayer[curRows][cols];
+        if (cells.size() > 3) {
+            List<OXOPlayer> lastRow = cells.get(cells.size() - 1);
+            for (OXOPlayer p : lastRow) {
+                if (p != null) return;
+            }
+            cells.remove(cells.size() - 1);
         }
     }
 
@@ -79,29 +91,33 @@ public class OXOModel implements Serializable {
     }
 
     public void addColumn() {
-        if (cells[0].length <= 9) {
-            int rows = cells.length;
-            int curCols = cells[0].length;
-            curCols += 1;
-            this.cells = new OXOPlayer[rows][curCols];
+        if (cells.get(0).size() < 9) {
+            for (int i = 0; i < cells.size(); i++) {
+                cells.get(i).add(null);
+            }
         }
     }
 
     public void removeColumn() {
-        if (cells[0].length > 3) {
-            int rows = cells.length;
-            int curCols = cells[0].length;
-            curCols -= 1;
-            this.cells = new OXOPlayer[rows][curCols];
+        if (cells.get(0).size() > 3) {
+            int lastCol = cells.get(0).size() - 1;
+
+            for (List<OXOPlayer> row : cells) {
+                if (row.get(lastCol) != null) return;
+            }
+
+            for (List<OXOPlayer> row : cells) {
+                row.remove(lastCol);
+            }
         }
     }
 
     public OXOPlayer getCellOwner(int rowNumber, int colNumber) {
-        return cells[rowNumber][colNumber];
+        return cells.get(rowNumber).get(colNumber);
     }
 
     public void setCellOwner(int rowNumber, int colNumber, OXOPlayer player) {
-        cells[rowNumber][colNumber] = player;
+        cells.get(rowNumber).set(colNumber, player);
     }
 
     public void setWinThreshold(int winThresh) {
@@ -133,13 +149,13 @@ public class OXOModel implements Serializable {
     }
 
     public  void reset() {
-        int rows = cells.length;
-        int cols = cells[0].length;
+        setWinner(null);
+        setGameDrawn(false);
 
-        // 清空棋盘，把每个格子设为 null
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                cells[i][j] = null;
+        for (int i = 0; i < cells.size(); i++) {
+            List<OXOPlayer> row = cells.get(i);
+            for (int j = 0; j < row.size(); j++) {
+                row.set(j, null); // 或者 row.set(j, null)
             }
         }
     }
