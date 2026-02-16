@@ -96,6 +96,7 @@ public class OXOModel implements Serializable {
                 cells.get(i).add(null);
             }
         }
+
     }
 
     public void removeColumn() {
@@ -132,18 +133,6 @@ public class OXOModel implements Serializable {
         gameDrawn = isDrawn;
     }
 
-    public void increaseWinThreshold() {
-        int curWinThresh = this.winThreshold;
-        curWinThresh += 1;
-        this.winThreshold = curWinThresh;
-    }
-
-    public void decreaseWinThreshold() {
-        int curWinThresh = this.winThreshold;
-        curWinThresh -= 1;
-        this.winThreshold = curWinThresh;
-    }
-
     public boolean isGameDrawn() {
         return gameDrawn;
     }
@@ -151,6 +140,7 @@ public class OXOModel implements Serializable {
     public  void reset() {
         setWinner(null);
         setGameDrawn(false);
+        setWinThreshold(3);
 
         for (int i = 0; i < cells.size(); i++) {
             List<OXOPlayer> row = cells.get(i);
